@@ -7,7 +7,7 @@ async function write(content) {
 }
 
 async function read() {
-    return await fs.readFile(filePath);
+    return await fs.readFile(filePath, 'utf-8');
 }
 
 module.exports = {

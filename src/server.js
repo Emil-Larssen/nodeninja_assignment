@@ -1,22 +1,23 @@
 const express = require('express');
-const app = express()
+const app = express();
 const port = 3000
 const emitter = require('./eventBus');
 const storageService = require('./services/fileService');
 require('./logger');
 
-app.get('/read-file', async (req, res) => {
+app.use(express.json());
+app.get('/read', async (req, res) => {
     emitter.emit('get-request');
     try{
         const data = await storageService.read();
-        res.send(data);
+        res.status(200).type('text/plain').send(data);
     } catch (err) {
         res.status(500).send('<h1>File could not be read</h1>')
     }
 });
 
-app.use(express.json());
-app.post('/write-file', async(req, res) => {
+
+app.post('/write', async(req, res) => {
     emitter.emit('post-request');
     if(typeof req.body.content !== 'string'){
         res.status(400).send('<h1>content must be a string</h1>');
@@ -30,6 +31,11 @@ app.post('/write-file', async(req, res) => {
     }
 })
 
+
+app.get('/test', (req, res) => {
+    res.send('hello');
+});
+
 app.use((req, res) => {
     emitter.emit('unknown-request');
     res.status(404).send('<h1>404 Not Found</h1>');
@@ -38,3 +44,5 @@ app.use((req, res) => {
 app.listen(port, () => {
     emitter.emit('server-started',port);
 });
+
+
