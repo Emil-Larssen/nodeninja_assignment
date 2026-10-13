@@ -1,13 +1,13 @@
 const fs = require('fs/promises');
 const path = require('path');
-const filePath = path.join(__dirname, '...', 'data', 'textfile.txt');
+const filePath = path.join(__dirname, '..', '..', 'data', 'textfile.txt');
 
 async function write(content) {
     await fs.writeFile(filePath, content);
 }
 
 async function read() {
-    await fs.readFile(filePath);
+    return await fs.readFile(filePath);
 }
 
 module.exports = {
