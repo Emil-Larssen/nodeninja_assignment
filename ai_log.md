@@ -31,4 +31,17 @@ AI-forslag blev ikke bare kopieret direkte ind. De blev løbende testet i projek
 
 Forslag blev kun beholdt, hvis de gav mening i forhold til kravene og virkede efter test.
 
+### Konkret problemstilling  
+POST-endpoint havde nogle fejl på sig, AI agent blev bedt om at evaluere endpointet  
+UDEN at ændre i koden.  
+Tilbagemelding var at endpointet fejlagtigt tjekkede for !req.body.file hvor det istedet skulle have været  
+!req.body.content, da vi kun ønsker at kontrollere om content eksisterer, ikke hvorvidt file eksisterer da ny fil automatisk genereres.  
+Yderligere returnerede endpointet 'undefined' via fs.writeFile. res.(data) ville da forsøge at returnere 'undefined'  
+frem for en statuskode 200.
+
+Korrektionen blev da udført ved at korrigere til !req.body.content istedet for file (som tydeligt er en fejl formegentlig opstået ved refaktorering)  
+samt succesfuld filskrivning korrigeret til at returnere en 200 statuskode istedet for data.
+
+Efterfølgende blev anden LLM adspurgt om validering og vejledte om kontrol af tilladt JSON string via 'typeof'.
+
 (AI blev anvendt til at danne denne log med udgangspunkt I den løbende chat for projektet.)
