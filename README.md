@@ -3,9 +3,9 @@ NodeNinja er en simpel HTTP server bygget med express, som kan læse og skrive (
 Dvs. et GET/read-file endpoint og et POST/write-file endpoint.
 
 ### Asynkronitet  
-Når metoder køres asynkront er det ligesom at starte en separat tråd der kører parallelt med "programmet"
-hvormed serveren ikke er låst op på at afvente fuldførelse af det enkelte request.
-Dermed kan serveren stadig lytte og modtage separate requests den kan udføre uden at det afhænger af om det foregående request er fuldført endnu.
+Når en asynkron funktion kaldes, returneres et "promise" om at der på et senere tidspunkt kommer et resultat.  
+Node's event loop kan i mellemtiden fortsætte med at håndtere andre requests og opgaver.
+await keywordet indikerer hvor den asynkrone funktion skal afvente at det pågældende promise opfyldes eller afvises.
 
 ### Event-emitter
 Event-emitter er sat op som et eventBUS der indeholder en singleton emitter instance.
