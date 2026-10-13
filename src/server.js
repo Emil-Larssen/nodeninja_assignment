@@ -6,16 +6,29 @@ const storageService = require('./services/fileService');
 require('./logger');
 
 app.use(express.json());
+app.use((req, res, next) => {
+    const start = Date.now();
+    res.on('finish', () => {
+        const responseTime = Date.now() - start;
+        emitter.emit('request-finished',
+            req.method,
+            req.path,
+            res.statusCode,
+            responseTime
+        );
+    });
+    next();
+});
+
 app.get('/read', async (req, res) => {
     emitter.emit('get-request');
     try{
         const data = await storageService.read();
-        res.status(200).type('text/plain').send(data);
+        res.status(200).send(data);
     } catch (err) {
         res.status(500).send('<h1>File could not be read</h1>')
     }
 });
-
 
 app.post('/write', async(req, res) => {
     emitter.emit('post-request');
@@ -31,13 +44,7 @@ app.post('/write', async(req, res) => {
     }
 })
 
-
-app.get('/test', (req, res) => {
-    res.send('hello');
-});
-
 app.use((req, res) => {
-    emitter.emit('unknown-request');
     res.status(404).send('<h1>404 Not Found</h1>');
 })
 

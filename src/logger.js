@@ -1,17 +1,12 @@
 const emitter = require('./eventBus');
 
 emitter.on('server-started', (port) => {
-    console.log(`Server started on port ${port}`);
+    const startTime = new Date().toISOString();
+    console.log(`${startTime} Server started on port ${port}`);
 });
 
-emitter.on('get-request', () => {
-    console.log('GET/read-file request received');
+emitter.on('request-finished', (method, path, statusCode, responseTime) => {
+    const timestamp = new Date().toISOString();
+    console.log(`${timestamp} ${method} ${path} ${statusCode} ${responseTime}ms`);
 });
 
-emitter.on('post-request', () => {
-    console.log('POST/write-file request received');
-});
-
-emitter.on('unknown-request', () => {
-    console.log('Unknown request received');
-});
